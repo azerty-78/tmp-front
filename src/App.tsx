@@ -8,6 +8,7 @@ import { LoginPage } from './pages/user/LoginPage';
 import { UserDashboardPage } from './pages/user/DashboardPage';
 import { ProfilePage } from './pages/user/ProfilePage';
 import { AboutPage } from './pages/user/AboutPage';
+import { ComponentsDemoPage } from './pages/user/ComponentsDemoPage';
 
 // Pages Employé
 import { EmployeDashboardPage } from './pages/employe/DashboardPage';
@@ -42,6 +43,7 @@ function App() {
         {/* Routes User (authentification optionnelle) */}
         <Route path="/user/dashboard" element={<UserDashboardPage />} />
         <Route path="/user/profile" element={<ProfilePage />} />
+        <Route path="/user/components-demo" element={<ComponentsDemoPage />} />
 
         {/* Routes Employé */}
         <Route

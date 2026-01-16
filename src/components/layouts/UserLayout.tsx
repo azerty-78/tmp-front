@@ -21,6 +21,7 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
     { path: '/', label: 'Accueil', icon: FaHome },
     { path: '/about', label: 'À propos', icon: FaInfoCircle },
     { path: '/user/profile', label: 'Profil', icon: FaUser },
+    { path: '/user/components-demo', label: 'Composants', icon: FaInfoCircle },
   ];
 
   const handleLogout = () => {
