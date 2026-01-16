@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { themeConfig } from '../../config/theme';
 import { UserRole } from '../../types/auth';
 import { getDefaultRoute } from '../../utils/roleUtils';
 import { FaEnvelope, FaLock, FaUser, FaBriefcase, FaShieldAlt, FaCog } from 'react-icons/fa';
+import { Input, Button, Alert } from '../../components/ui';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +16,7 @@ export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useAuth();
+  const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,6 +29,7 @@ export const LoginPage = () => {
     // Vérifier qu'un rôle est sélectionné
     if (!selectedRole) {
       setError('Veuillez sélectionner un rôle');
+      showError('Veuillez sélectionner un rôle pour continuer');
       return;
     }
 
@@ -35,11 +39,15 @@ export const LoginPage = () => {
       // Mode test : connexion avec n'importe quelles valeurs
       await login({ email, password, role: selectedRole });
       
+      showSuccess(`Connexion réussie en tant que ${selectedRole}`);
+      
       // Rediriger vers la route par défaut du rôle
       const defaultRoute = getDefaultRoute(selectedRole);
       navigate(defaultRoute, { replace: true });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur de connexion');
+      const errorMessage = err.response?.data?.message || 'Erreur de connexion';
+      setError(errorMessage);
+      showError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -90,49 +98,33 @@ export const LoginPage = () => {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm">{error}</div>
+          <Alert variant="error" onClose={() => setError('')}>
+            {error}
+          </Alert>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: themeConfig.text.primary }}>
-              Email
-            </label>
-            <div className="relative">
-              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
-                style={{
-                  borderColor: themeConfig.colors.primary + '40',
-                  focusRingColor: themeConfig.colors.primary,
-                }}
-              />
-            </div>
-          </div>
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            leftIcon={<FaEnvelope />}
+            fullWidth
+            helperText="Entrez votre adresse email"
+          />
 
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: themeConfig.text.primary }}>
-              Mot de passe
-            </label>
-            <div className="relative">
-              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="N'importe quelle valeur (mode test)"
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
-                style={{
-                  borderColor: themeConfig.colors.primary + '40',
-                  focusRingColor: themeConfig.colors.primary,
-                }}
-              />
-            </div>
-          </div>
+          <Input
+            label="Mot de passe"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="N'importe quelle valeur (mode test)"
+            leftIcon={<FaLock />}
+            fullWidth
+            helperText="En mode test, n'importe quelle valeur fonctionne"
+          />
 
           <div>
             <label className="block text-sm font-medium mb-3" style={{ color: themeConfig.text.primary }}>
@@ -184,14 +176,16 @@ export const LoginPage = () => {
             <strong>Mode Test :</strong> Entrez n'importe quelles valeurs et sélectionnez un rôle pour tester les différentes interfaces.
           </div>
 
-          <button
+          <Button
             type="submit"
-            disabled={isLoading || !selectedRole}
-            className="w-full py-2 rounded-lg text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: themeConfig.colors.primary }}
+            variant="primary"
+            fullWidth
+            isLoading={isLoading}
+            disabled={!selectedRole}
+            leftIcon={!isLoading && <FaEnvelope />}
           >
-            {isLoading ? 'Connexion...' : 'Se connecter'}
-          </button>
+            Se connecter
+          </Button>
         </form>
       </div>
     </div>
