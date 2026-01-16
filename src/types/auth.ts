@@ -28,6 +28,7 @@ export interface AuthState {
 export interface LoginCredentials {
   email: string;
   password: string;
+  role?: UserRole; // Pour le mode test
 }
 
 export interface RegisterData {

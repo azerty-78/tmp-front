@@ -74,6 +74,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (credentials: LoginCredentials) => {
     try {
+      // Mode test : si un rôle est spécifié, on crée un utilisateur de test
+      if (credentials.role) {
+        const testUser: User = {
+          id: 'test-' + Date.now(),
+          email: credentials.email || 'test@example.com',
+          name: credentials.email?.split('@')[0] || 'Utilisateur Test',
+          role: credentials.role,
+          permissions: [],
+        };
+
+        const testToken = 'test-token-' + Date.now();
+
+        localStorage.setItem('token', testToken);
+        localStorage.setItem('user', JSON.stringify(testUser));
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${testToken}`;
+
+        setAuthState({
+          user: testUser,
+          token: testToken,
+          isAuthenticated: true,
+          isLoading: false,
+        });
+        return;
+      }
+
+      // Mode production : appel API réel
       const response = await apiClient.post('/auth/login', credentials);
       const { token, user } = response.data;
 

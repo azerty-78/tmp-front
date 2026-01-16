@@ -5,6 +5,7 @@ import { UserRole } from './types/auth';
 // Pages User (public)
 import { HomePage } from './pages/user/HomePage';
 import { LoginPage } from './pages/user/LoginPage';
+import { UserDashboardPage } from './pages/user/DashboardPage';
 
 // Pages Employé
 import { EmployeDashboardPage } from './pages/employe/DashboardPage';
@@ -29,7 +30,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Routes User (authentification optionnelle) */}
-        {/* Ajoutez vos routes user ici */}
+        <Route path="/user/dashboard" element={<UserDashboardPage />} />
 
         {/* Routes Employé */}
         <Route
