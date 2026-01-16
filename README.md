@@ -1,73 +1,314 @@
-# React + TypeScript + Vite
+# 🚀 Template Frontend React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Template de démarrage rapide pour projets React modernes avec toutes les dépendances essentielles préconfigurées.
 
-Currently, two official plugins are available:
+## 📋 Table des matières
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Fonctionnalités](#-fonctionnalités)
+- [Stack Technique](#-stack-technique)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Structure du projet](#-structure-du-projet)
+- [Utilisation](#-utilisation)
+- [Scripts disponibles](#-scripts-disponibles)
+- [Docker](#-docker)
 
-## React Compiler
+## ✨ Fonctionnalités
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- ⚛️ **React 19** - Dernière version de React
+- 🔷 **TypeScript** - Typage statique pour une meilleure maintenabilité
+- ⚡ **Vite** - Build tool ultra-rapide
+- 🎨 **Tailwind CSS** - Framework CSS utility-first
+- 🧭 **React Router** - Navigation et routage
+- 🔄 **TanStack Query** - Gestion des données serveur (cache, synchronisation)
+- 🌐 **Axios** - Client HTTP pour les appels API
+- 🎯 **React Icons** - Bibliothèque d'icônes complète
+- 🛡️ **Error Boundary** - Gestion des erreurs React
+- 🐳 **Docker** - Configuration Docker prête à l'emploi
+- ✅ **ESLint** - Linting du code
+- 🧪 **Vitest** - Framework de tests
 
-## Expanding the ESLint configuration
+## 🛠️ Stack Technique
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Dépendances principales
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `react` ^19.2.0
+- `react-dom` ^19.2.0
+- `react-router-dom` ^7.12.0
+- `@tanstack/react-query` ^5.90.18
+- `axios` ^1.13.2
+- `react-icons` ^5.5.0
+- `@headlessui/react` ^2.2.9
+- `@heroicons/react` ^2.2.0
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Outils de développement
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `vite` ^7.2.4
+- `typescript` ~5.9.3
+- `tailwindcss` ^3.4.19
+- `eslint` ^9.39.1
+- `vitest` ^3.2.4
+
+## 🚀 Installation
+
+1. **Cloner ou copier ce template**
+
+2. **Installer les dépendances**
+   ```bash
+   npm install
+   ```
+
+3. **Configurer les variables d'environnement**
+   ```bash
+   cp .env.example .env
+   # Puis éditer .env avec vos valeurs
+   ```
+
+4. **Lancer le serveur de développement**
+   ```bash
+   npm run dev
+   ```
+
+L'application sera accessible sur **http://localhost:5190**
+
+## ⚙️ Configuration
+
+### Variables d'environnement
+
+Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+
+```env
+# URL de base de l'API backend
+VITE_API_BASE_URL=http://localhost:3000/api
+
+# Nom de l'application (optionnel)
+VITE_APP_NAME=Mon Application
+
+# Autres variables selon vos besoins
+# VITE_API_KEY=votre_cle_api
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> ⚠️ **Important** : Toutes les variables d'environnement doivent commencer par `VITE_` pour être accessibles dans le code frontend.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Port du serveur
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Le port par défaut est **5190**. Vous pouvez le modifier dans `vite.config.ts` :
+
+```typescript
+server: {
+  port: 5190,
+  host: true,
+}
 ```
+
+## 📁 Structure du projet
+
+```
+tmp-front/
+├── public/                 # Fichiers statiques publics
+├── src/
+│   ├── assets/            # Images, fonts, etc.
+│   ├── components/        # Composants réutilisables
+│   │   └── ErrorBoundary.tsx
+│   ├── hooks/             # Hooks personnalisés
+│   │   └── useApi.ts      # Hooks pour les appels API
+│   ├── lib/               # Utilitaires et configurations
+│   │   ├── api.ts         # Configuration Axios
+│   │   └── queryClient.ts # Configuration TanStack Query
+│   ├── pages/             # Pages de l'application
+│   │   ├── Home.tsx
+│   │   └── About.tsx
+│   ├── App.tsx            # Composant racine avec routes
+│   ├── main.tsx           # Point d'entrée
+│   └── index.css          # Styles globaux + Tailwind
+├── setup-front/           # Configuration Docker
+│   ├── Dockerfile
+│   └── compose.yaml
+├── .env                   # Variables d'environnement (à créer)
+├── .env.example           # Exemple de variables d'environnement
+├── vite.config.ts         # Configuration Vite
+├── tailwind.config.js     # Configuration Tailwind
+├── tsconfig.json          # Configuration TypeScript
+└── package.json
+```
+
+## 💻 Utilisation
+
+### Routes
+
+Les routes sont configurées dans `src/App.tsx` :
+
+```typescript
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/about" element={<About />} />
+</Routes>
+```
+
+### Appels API
+
+#### Avec TanStack Query (recommandé)
+
+```typescript
+import { useApiQuery, useApiMutation } from './hooks/useApi';
+
+// Requête GET
+function MyComponent() {
+  const { data, isLoading, error } = useApiQuery(['users'], '/users');
+  
+  if (isLoading) return <div>Chargement...</div>;
+  if (error) return <div>Erreur</div>;
+  
+  return <div>{JSON.stringify(data)}</div>;
+}
+
+// Mutation POST
+function CreateUser() {
+  const mutation = useApiMutation((userData) => 
+    apiClient.post('/users', userData)
+  );
+  
+  const handleSubmit = () => {
+    mutation.mutate({ name: 'John', email: 'john@example.com' });
+  };
+  
+  return <button onClick={handleSubmit}>Créer</button>;
+}
+```
+
+#### Directement avec Axios
+
+```typescript
+import apiClient from './lib/api';
+
+// GET
+const response = await apiClient.get('/users');
+
+// POST
+const response = await apiClient.post('/users', { name: 'John' });
+```
+
+### Authentification
+
+Le client Axios est préconfiguré pour gérer l'authentification automatiquement :
+
+- Le token est récupéré depuis `localStorage.getItem('token')`
+- Il est ajouté automatiquement dans le header `Authorization: Bearer <token>`
+- En cas d'erreur 401, redirection automatique vers `/login`
+
+Pour stocker un token après connexion :
+
+```typescript
+localStorage.setItem('token', 'votre_token_ici');
+```
+
+### Icônes
+
+Utilisez React Icons :
+
+```typescript
+import { FaHome, FaUser } from 'react-icons/fa';
+import { MdSettings } from 'react-icons/md';
+import { HiOutlineMail } from 'react-icons/hi';
+
+<FaHome />
+<FaUser />
+<MdSettings />
+<HiOutlineMail />
+```
+
+Consultez [react-icons](https://react-icons.github.io/react-icons/) pour toutes les icônes disponibles.
+
+### Styles avec Tailwind
+
+Tailwind CSS est configuré et prêt à l'emploi :
+
+```typescript
+<div className="bg-blue-500 text-white p-4 rounded-lg">
+  Contenu stylisé
+</div>
+```
+
+## 📜 Scripts disponibles
+
+```bash
+# Développement
+npm run dev          # Lance le serveur de développement (port 5190)
+
+# Build
+npm run build        # Compile le projet pour la production
+
+# Linting
+npm run lint         # Vérifie le code avec ESLint
+
+# Preview
+npm run preview      # Prévisualise le build de production
+```
+
+## 🐳 Docker
+
+### Build et lancement avec Docker
+
+```bash
+cd setup-front
+docker-compose up --build
+```
+
+L'application sera accessible sur **http://localhost:5190**
+
+### Configuration Docker
+
+- **Port** : 5190
+- **Base image** : Node.js 22 Alpine
+- **Environnement** : Production par défaut
+
+## 🔧 Personnalisation
+
+### Changer le nom du projet
+
+1. Modifier `name` dans `package.json`
+2. Modifier le titre dans `index.html`
+3. Mettre à jour les variables d'environnement si nécessaire
+
+### Ajouter de nouvelles dépendances
+
+```bash
+npm install <nom-du-package>
+```
+
+### Ajouter de nouvelles routes
+
+Éditez `src/App.tsx` et ajoutez vos routes :
+
+```typescript
+<Route path="/nouvelle-page" element={<NouvellePage />} />
+```
+
+## 📚 Ressources
+
+- [Documentation React](https://react.dev)
+- [Documentation Vite](https://vite.dev)
+- [Documentation Tailwind CSS](https://tailwindcss.com)
+- [Documentation React Router](https://reactrouter.com)
+- [Documentation TanStack Query](https://tanstack.com/query)
+- [Documentation Axios](https://axios-http.com)
+
+## 📝 Notes
+
+- Ce template utilise React 19, assurez-vous que toutes vos dépendances sont compatibles
+- Le port 5190 est configuré pour correspondre à la configuration Docker
+- Les variables d'environnement doivent commencer par `VITE_` pour être accessibles
+- Un Error Boundary est configuré pour capturer les erreurs React
+
+## 🎯 Prochaines étapes
+
+1. ✅ Configurer les variables d'environnement dans `.env`
+2. ✅ Personnaliser les pages dans `src/pages/`
+3. ✅ Ajouter vos routes dans `src/App.tsx`
+4. ✅ Créer vos composants dans `src/components/`
+5. ✅ Configurer votre API backend
+6. ✅ Personnaliser les styles Tailwind si nécessaire
+
+---
+
+**Bon développement ! 🚀**
