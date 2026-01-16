@@ -1,5 +1,7 @@
 import { UserLayout } from '../../components/layouts/UserLayout';
 import { themeConfig } from '../../config/theme';
+import { Link } from 'react-router-dom';
+import { FaSignInAlt } from 'react-icons/fa';
 
 export const HomePage = () => {
   return (
@@ -34,9 +36,17 @@ export const HomePage = () => {
             <h3 className="text-xl font-semibold mb-2" style={{ color: themeConfig.text.primary }}>
               Espace Client
             </h3>
-            <p style={{ color: themeConfig.text.secondary }}>
+            <p style={{ color: themeConfig.text.secondary }} className="mb-4">
               Connectez-vous pour accéder à votre espace personnel.
             </p>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-colors hover:opacity-90"
+              style={{ backgroundColor: themeConfig.colors.primary }}
+            >
+              <FaSignInAlt />
+              <span>Se connecter</span>
+            </Link>
           </div>
 
           <div

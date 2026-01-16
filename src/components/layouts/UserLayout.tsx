@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { BaseLayout } from './BaseLayout';
 import { themeConfig } from '../../config/theme';
-import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUser, FaInfoCircle } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { FaHome, FaUser, FaInfoCircle, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 interface UserLayoutProps {
   children: ReactNode;
@@ -13,12 +14,19 @@ interface UserLayoutProps {
  */
 export const UserLayout = ({ children }: UserLayoutProps) => {
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navItems = [
     { path: '/', label: 'Accueil', icon: FaHome },
     { path: '/about', label: 'À propos', icon: FaInfoCircle },
     { path: '/user/profile', label: 'Profil', icon: FaUser },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const header = (
     <div className="flex items-center justify-between px-6 py-4">
@@ -59,6 +67,26 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
             </Link>
           );
         })}
+        
+        {isAuthenticated ? (
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-white"
+            style={{ backgroundColor: themeConfig.colors.error }}
+          >
+            <FaSignOutAlt />
+            <span>Déconnexion</span>
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-white"
+            style={{ backgroundColor: themeConfig.colors.primary }}
+          >
+            <FaSignInAlt />
+            <span>Connexion</span>
+          </Link>
+        )}
       </nav>
     </div>
   );
