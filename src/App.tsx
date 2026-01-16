@@ -6,6 +6,7 @@ import { UserRole } from './types/auth';
 import { HomePage } from './pages/user/HomePage';
 import { LoginPage } from './pages/user/LoginPage';
 import { UserDashboardPage } from './pages/user/DashboardPage';
+import { ProfilePage } from './pages/user/ProfilePage';
 
 // Pages Employé
 import { EmployeDashboardPage } from './pages/employe/DashboardPage';
@@ -31,6 +32,7 @@ function App() {
 
         {/* Routes User (authentification optionnelle) */}
         <Route path="/user/dashboard" element={<UserDashboardPage />} />
+        <Route path="/user/profile" element={<ProfilePage />} />
 
         {/* Routes Employé */}
         <Route

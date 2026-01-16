@@ -83,7 +83,7 @@ export const themeConfig: ThemeConfig = {
   },
 
   backgrounds: {
-    default: '#F9FAFB',
+    default: '#FFFFFF', // Blanc pur
     paper: '#FFFFFF',
     sidebar: '#1F2937',
     header: '#FFFFFF',

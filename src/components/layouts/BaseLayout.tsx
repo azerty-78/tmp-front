@@ -21,20 +21,20 @@ export const BaseLayout = ({
   showHeader = true,
 }: BaseLayoutProps) => {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: themeConfig.backgrounds.default }}>
+    <div className="w-full h-full min-h-screen" style={{ backgroundColor: '#FFFFFF' }}>
       {showHeader && (
         <header
           className="sticky top-0 z-50 shadow-sm"
-          style={{ backgroundColor: themeConfig.backgrounds.header }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           {header || <DefaultHeader />}
         </header>
       )}
 
-      <div className="flex">
+      <div className="flex w-full h-full">
         {showSidebar && sidebar && (
           <aside
-            className="fixed left-0 top-0 h-screen w-64 shadow-lg"
+            className="fixed left-0 top-0 h-screen w-64 shadow-lg z-40"
             style={{ backgroundColor: themeConfig.backgrounds.sidebar }}
           >
             {sidebar}
@@ -42,7 +42,8 @@ export const BaseLayout = ({
         )}
 
         <main
-          className={`flex-1 ${showSidebar ? 'ml-64' : ''} transition-all duration-300`}
+          className={`flex-1 w-full ${showSidebar ? 'ml-64' : ''} transition-all duration-300`}
+          style={{ backgroundColor: '#FFFFFF', minHeight: 'calc(100vh - 64px)' }}
         >
           <div className="p-6">{children}</div>
         </main>
