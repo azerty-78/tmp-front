@@ -28,6 +28,18 @@ Template de démarrage rapide pour projets React modernes avec toutes les dépen
 - ✅ **ESLint** - Linting du code
 - 🧪 **Vitest** - Framework de tests
 
+### 🎯 Architecture Modulaire
+
+- **4 Modules d'authentification** :
+  - 👤 Module User (public, avec ou sans login)
+  - 👔 Module Employé (gestion du contenu)
+  - 🛡️ Module Admin (gestion des employés)
+  - ⚙️ Module Root Admin (maintenance et super admin)
+
+- **Système de thème centralisé** : Personnalisation facile (couleurs, logos, etc.)
+- **Routes protégées** : Gestion des accès par rôle
+- **Layouts modulaires** : Un layout par module, facilement personnalisable
+
 ## 🛠️ Stack Technique
 
 ### Dépendances principales
@@ -59,10 +71,19 @@ Template de démarrage rapide pour projets React modernes avec toutes les dépen
    ```
 
 3. **Configurer les variables d'environnement**
-   ```bash
-   cp .env.example .env
-   # Puis éditer .env avec vos valeurs
+   
+   Créez un fichier `.env` à la racine du projet avec le contenu suivant :
+   ```env
+   # Configuration de l'API
+   VITE_API_BASE_URL=http://localhost:3000/api
+   
+   # Configuration de l'application
+   VITE_APP_NAME=KOBE CORPORATION
+   VITE_APP_VERSION=1.0.0
+   VITE_APP_ENV=development
    ```
+   
+   > 💡 **Note** : Toutes les variables doivent commencer par `VITE_` pour être accessibles dans le code frontend.
 
 4. **Lancer le serveur de développement**
    ```bash
@@ -105,19 +126,38 @@ server: {
 
 ```
 tmp-front/
-├── public/                 # Fichiers statiques publics
+├── public/                 # Fichiers statiques publics (logos, etc.)
 ├── src/
 │   ├── assets/            # Images, fonts, etc.
 │   ├── components/        # Composants réutilisables
+│   │   ├── layouts/       # Layouts pour chaque module
+│   │   │   ├── BaseLayout.tsx
+│   │   │   ├── UserLayout.tsx
+│   │   │   ├── EmployeLayout.tsx
+│   │   │   ├── AdminLayout.tsx
+│   │   │   └── RootAdminLayout.tsx
 │   │   └── ErrorBoundary.tsx
+│   ├── config/            # Configuration centralisée
+│   │   ├── theme.ts       # Configuration du thème (COULEURS, LOGOS)
+│   │   └── routes.ts      # Configuration des routes
+│   ├── contexts/          # Contextes React
+│   │   └── AuthContext.tsx # Gestion de l'authentification
+│   ├── guards/            # Protection des routes
+│   │   └── ProtectedRoute.tsx
 │   ├── hooks/             # Hooks personnalisés
 │   │   └── useApi.ts      # Hooks pour les appels API
 │   ├── lib/               # Utilitaires et configurations
 │   │   ├── api.ts         # Configuration Axios
 │   │   └── queryClient.ts # Configuration TanStack Query
-│   ├── pages/             # Pages de l'application
-│   │   ├── Home.tsx
-│   │   └── About.tsx
+│   ├── pages/             # Pages organisées par module
+│   │   ├── user/          # Module User (public)
+│   │   ├── employe/       # Module Employé
+│   │   ├── admin/         # Module Admin
+│   │   └── root-admin/    # Module Root Admin
+│   ├── types/             # Types TypeScript
+│   │   └── auth.ts        # Types pour l'authentification
+│   ├── utils/             # Utilitaires
+│   │   └── roleUtils.ts   # Utilitaires pour les rôles
 │   ├── App.tsx            # Composant racine avec routes
 │   ├── main.tsx           # Point d'entrée
 │   └── index.css          # Styles globaux + Tailwind
@@ -126,6 +166,7 @@ tmp-front/
 │   └── compose.yaml
 ├── .env                   # Variables d'environnement (à créer)
 ├── .env.example           # Exemple de variables d'environnement
+├── PERSONNALISATION.md    # Guide de personnalisation
 ├── vite.config.ts         # Configuration Vite
 ├── tailwind.config.js     # Configuration Tailwind
 ├── tsconfig.json          # Configuration TypeScript

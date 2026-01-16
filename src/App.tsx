@@ -1,14 +1,71 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from './guards/ProtectedRoute';
+import { UserRole } from './types/auth';
+
+// Pages User (public)
+import { HomePage } from './pages/user/HomePage';
+import { LoginPage } from './pages/user/LoginPage';
+
+// Pages Employé
+import { EmployeDashboardPage } from './pages/employe/DashboardPage';
+
+// Pages Admin
+import { AdminDashboardPage } from './pages/admin/DashboardPage';
+
+// Pages Root Admin
+import { RootAdminDashboardPage } from './pages/root-admin/DashboardPage';
+
+// Pages communes
+import { UnauthorizedPage } from './pages/UnauthorizedPage';
+
 import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        {/* Routes publiques */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Routes User (authentification optionnelle) */}
+        {/* Ajoutez vos routes user ici */}
+
+        {/* Routes Employé */}
+        <Route
+          path="/employe/dashboard"
+          element={
+            <ProtectedRoute requiredRole={UserRole.EMPLOYE}>
+              <EmployeDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Routes Admin */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute requiredRole={UserRole.ADMIN}>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Routes Root Admin */}
+        <Route
+          path="/root-admin/dashboard"
+          element={
+            <ProtectedRoute requiredRole={UserRole.ROOT_ADMIN}>
+              <RootAdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Page non autorisée */}
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+        {/* Redirection par défaut */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
