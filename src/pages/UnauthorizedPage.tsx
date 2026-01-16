@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { themeConfig } from '../../config/theme';
+import { themeConfig } from '@/config/theme';
 import { FaLock, FaHome } from 'react-icons/fa';
 
 export const UnauthorizedPage = () => {
