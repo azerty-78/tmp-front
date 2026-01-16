@@ -12,3 +12,4 @@ export type { ToastData, ToastType } from './Toast';
 export { Dialog, type DialogProps } from './Dialog';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 export { AlertDialog, type AlertDialogProps } from './AlertDialog';
+export { ErrorDisplay, type ErrorDisplayProps } from './ErrorDisplay';

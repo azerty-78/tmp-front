@@ -9,6 +9,7 @@ import {
   Dialog,
   ConfirmDialog,
   AlertDialog,
+  ErrorDisplay,
 } from '../../components/ui';
 import { useToast } from '../../contexts/ToastContext';
 import { themeConfig } from '../../config/theme';
@@ -184,6 +185,33 @@ export const ComponentsDemoPage = () => {
             <Alert variant="error" title="Erreur" onClose={() => {}}>
               Une erreur s'est produite lors de l'opération.
             </Alert>
+          </div>
+        </Card>
+
+        {/* Section ErrorDisplay */}
+        <Card title="Affichage d'erreurs (ErrorDisplay)" className="mb-8">
+          <div className="space-y-4">
+            <p style={{ color: themeConfig.text.secondary }}>
+              Composant pour afficher les erreurs de manière élégante avec possibilité de retry
+            </p>
+            <div className="space-y-4">
+              <ErrorDisplay
+                error="Erreur réseau détectée"
+                title="Erreur de connexion"
+                onRetry={() => showInfo('Tentative de reconnexion...')}
+                retryText="Réessayer"
+              />
+              <ErrorDisplay
+                error={new Error('Erreur serveur 500')}
+                title="Erreur serveur"
+                showDetails={true}
+                onRetry={() => showWarning('Nouvelle tentative...')}
+              />
+              <ErrorDisplay
+                error="Erreur simple sans retry"
+                variant="warning"
+              />
+            </div>
           </div>
         </Card>
 

@@ -1,43 +1,51 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { themeConfig } from '../../config/theme';
 import { UserRole } from '../../types/auth';
 import { getDefaultRoute } from '../../utils/roleUtils';
+import { loginSchema, type LoginFormData } from '../../lib/validations';
 import { FaEnvelope, FaLock, FaUser, FaBriefcase, FaShieldAlt, FaCog } from 'react-icons/fa';
-import { Input, Button, Alert } from '../../components/ui';
+import { Input, Button, ErrorDisplay } from '../../components/ui';
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
   const { login } = useAuth();
   const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const from = (location.state as any)?.from?.pathname || '/';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    setSubmitError(null);
 
     // Vérifier qu'un rôle est sélectionné
     if (!selectedRole) {
-      setError('Veuillez sélectionner un rôle');
+      setSubmitError('Veuillez sélectionner un rôle');
       showError('Veuillez sélectionner un rôle pour continuer');
       return;
     }
 
-    setIsLoading(true);
-
     try {
       // Mode test : connexion avec n'importe quelles valeurs
-      await login({ email, password, role: selectedRole });
+      await login({ ...data, role: selectedRole });
       
       showSuccess(`Connexion réussie en tant que ${selectedRole}`);
       
@@ -45,11 +53,12 @@ export const LoginPage = () => {
       const defaultRoute = getDefaultRoute(selectedRole);
       navigate(defaultRoute, { replace: true });
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Erreur de connexion';
-      setError(errorMessage);
+      const errorMessage = err.formattedMessage || 
+                          err.response?.data?.message || 
+                          err.message || 
+                          'Erreur de connexion';
+      setSubmitError(errorMessage);
       showError(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -97,19 +106,19 @@ export const LoginPage = () => {
           <p style={{ color: themeConfig.text.secondary }}>Accédez à votre compte</p>
         </div>
 
-        {error && (
-          <Alert variant="error" onClose={() => setError('')}>
-            {error}
-          </Alert>
-        )}
+        <ErrorDisplay
+          error={submitError}
+          title="Erreur de connexion"
+          onRetry={() => setSubmitError(null)}
+          retryText="Réessayer"
+        />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
             label="Email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register('email')}
+            error={errors.email?.message}
             leftIcon={<FaEnvelope />}
             fullWidth
             helperText="Entrez votre adresse email"
@@ -118,8 +127,8 @@ export const LoginPage = () => {
           <Input
             label="Mot de passe"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register('password')}
+            error={errors.password?.message}
             placeholder="N'importe quelle valeur (mode test)"
             leftIcon={<FaLock />}
             fullWidth
@@ -180,9 +189,9 @@ export const LoginPage = () => {
             type="submit"
             variant="primary"
             fullWidth
-            isLoading={isLoading}
-            disabled={!selectedRole}
-            leftIcon={!isLoading && <FaEnvelope />}
+            isLoading={isSubmitting}
+            disabled={!selectedRole || isSubmitting}
+            leftIcon={!isSubmitting && <FaEnvelope />}
           >
             Se connecter
           </Button>
