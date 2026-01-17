@@ -13,3 +13,8 @@ export { Dialog, type DialogProps } from './Dialog';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 export { AlertDialog, type AlertDialogProps } from './AlertDialog';
 export { ErrorDisplay, type ErrorDisplayProps } from './ErrorDisplay';
+export { Table, type TableProps, type TableColumn } from './Table';
+export { Select, type SelectProps, type SelectOption } from './Select';
+export { Textarea, type TextareaProps } from './Textarea';
+export { Checkbox, type CheckboxProps } from './Checkbox';
+export { Switch, type SwitchProps } from './Switch';
